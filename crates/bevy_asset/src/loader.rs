@@ -119,6 +119,15 @@ impl<'a> LoadContext<'a> {
         self.get_handle(AssetPath::new_ref(self.path(), Some(label)))
     }
 
+    pub fn get_mut_labeled_asset<T: Asset>(&mut self, label: &str) -> Option<&mut T> {
+        assert!(!label.is_empty());
+        
+        self.labeled_assets
+            .get_mut(&Some(label.to_string()))
+            .and_then(|loaded_asset| loaded_asset.value.as_mut())
+            .and_then(|dyn_asset| dyn_asset.downcast_mut::<T>())
+    }
+
     pub fn get_handle<I: Into<HandleId>, T: Asset>(&self, id: I) -> Handle<T> {
         Handle::strong(id.into(), self.ref_change_channel.sender.clone())
     }

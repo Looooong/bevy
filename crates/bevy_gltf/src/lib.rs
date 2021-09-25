@@ -3,6 +3,9 @@ use std::collections::HashMap;
 mod loader;
 pub use loader::*;
 
+mod animation;
+pub use animation::*;
+
 use bevy_app::prelude::*;
 use bevy_asset::{AddAsset, Handle};
 use bevy_pbr::prelude::StandardMaterial;
@@ -20,7 +23,9 @@ impl Plugin for GltfPlugin {
             .add_asset::<Gltf>()
             .add_asset::<GltfNode>()
             .add_asset::<GltfPrimitive>()
-            .add_asset::<GltfMesh>();
+            .add_asset::<GltfMesh>()
+            .add_asset::<GltfAnimation>()
+            .register_type::<GltfAnimTargetInfo>();
     }
 }
 
@@ -35,6 +40,8 @@ pub struct Gltf {
     pub named_materials: HashMap<String, Handle<StandardMaterial>>,
     pub nodes: Vec<Handle<GltfNode>>,
     pub named_nodes: HashMap<String, Handle<GltfNode>>,
+    pub animations: Vec<Handle<GltfAnimation>>,
+    pub named_animations: HashMap<String, Handle<GltfAnimation>>,
     pub default_scene: Option<Handle<Scene>>,
 }
 
